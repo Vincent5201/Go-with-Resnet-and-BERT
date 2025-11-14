@@ -185,8 +185,9 @@ while running:
                 tgt += 1
                 x, y = split_move(poses[tgt])
             pose = poses[tgt]
-        print(pose)
+            
         result = pose
+        x, y = split_move(pose)
         last_move[turn] = result
         
         channel_01(board, x, y, turn)
