@@ -6,5 +6,6 @@
 * For the policy network, besides the traditional ResNet, we also tried using BERT.
 * For the value network, use a computational method instead of deep learning model, it is useless now.
 * Implement MCTS functoins to predict next move, but we don't have usefull value network.
+* MCTS is time consuming, it will recaculate in each move.
 * No Reinforce learning.
 * Add pybind11 and use c++ to improve running speed.
