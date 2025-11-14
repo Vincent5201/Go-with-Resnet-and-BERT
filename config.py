@@ -14,3 +14,4 @@ FIRST_STEPS = ["dd", "cd", "dc", "dp", "dq", "cp", "pd", "qd",
 USE_MCTS = False
 MCTS_BOUND = 10
 MCTS_ITERS = 100
+GAME_TYPE = "Combine"  # "Combine"(suggested), "Picture", "Word"

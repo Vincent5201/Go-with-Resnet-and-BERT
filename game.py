@@ -143,11 +143,18 @@ def quit_game():
     pygame.quit()
     sys.exit()
 
-data_types = ["Combine"]
 paths = []
-#paths.append("models//ResNet//mid_s65_30000.pt")
-#paths.append("models//BERT//mid_s27_30000.pt")
-paths.append("models//Combine//B20000_R20000.pt")
+if GAME_TYPE == "Combine":
+    data_types = ["Combine"]
+    paths.append("models//Combine//B20000_R20000.pt")
+elif GAME_TYPE == "Picture":
+    data_types = ["Picture"]
+    paths.append("models//ResNet//mid_s65_30000.pt")
+elif GAME_TYPE == "Word":
+    data_types = ["Word"]
+    paths.append("models//BERT//mid_s45_20000.pt")
+
+
 device = "cpu"
 model_config = {}
 model_config["hidden_size"] = HIDDEN_SIZE
