@@ -1,4 +1,5 @@
-# Go-on-Bert-and-ResNet
+# Go-with-Resnet-and-BERT
+
 ## Introducion
 * Reconsturct codes in my [old repo](https://github.com/Vincent5201/BERT-for-GO-prediction) and remove redundant parts.
 * A simple Go engine refers to AlphaGo.
