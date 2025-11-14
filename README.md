@@ -9,3 +9,7 @@
 * MCTS is time consuming, it will recaculate in each move.
 * No Reinforce learning.
 * Add pybind11 and use c++ to improve running speed.
+
+## How to run
+1. run `python cpp_setup.py build_ext --inplace` first
+2. play: `python game.py` or train: `python train.py`
