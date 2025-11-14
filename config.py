@@ -10,3 +10,7 @@ RES_LAYERS = 14
 
 FIRST_STEPS = ["dd", "cd", "dc", "dp", "dq", "cp", "pd", "qd", 
                    "pc", "pp", "pq", "qp","cc", "cq", "qc","qq"]
+
+USE_MCTS = False
+MCTS_BOUND = 10
+MCTS_ITERS = 100

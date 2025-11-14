@@ -50,7 +50,6 @@ cool_time = 0
 turn = 1
 playing = False
 computer_turn = 0
-mcts = True
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("圍棋")
@@ -156,7 +155,7 @@ model_config["bert_layers"] = BERT_LAYERS
 model_config["res_channel"] = RES_CHANNELS
 model_config["res_layers"] = RES_LAYERS
 models = load_models(paths, data_types, model_config, device)
-use_mcts = True
+use_mcts = USE_MCTS
 
 while running:
     screen.fill(BACKGROUND_COLOR)
@@ -164,17 +163,18 @@ while running:
         button_cool = True
 
     if playing and computer_turn == turn:
-        if use_mcts and len(game) > 10:
-            pose = MCTS(data_types, models, device, board, seq, len(game), min(len(game)+50 ,max(150, len(game) + 20)), 100)
+        if use_mcts and len(game) > MCTS_BOUND:
+            pose = MCTS(data_types, models, device, board, seq, len(game), min(len(game)+50 ,max(150, len(game) + 20)), MCTS_ITERS)
         else:
             poses, _ = vote_next_move(data_types, models, device, board, seq)
-        tgt = 0
-        x, y = split_move(poses[tgt])
-        while poses[tgt] == last_move[turn] or board[0][x][y] or board[1][x][y]:
-            tgt += 1
+            tgt = 0
             x, y = split_move(poses[tgt])
+            while poses[tgt] == last_move[turn] or board[0][x][y] or board[1][x][y]:
+                tgt += 1
+                x, y = split_move(poses[tgt])
+            pose = poses[tgt]
             
-        result = poses[tgt]
+        result = pose
         last_move[turn] = result
         
         channel_01(board, x, y, turn)
