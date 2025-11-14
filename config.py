@@ -11,7 +11,7 @@ RES_LAYERS = 14
 FIRST_STEPS = ["dd", "cd", "dc", "dp", "dq", "cp", "pd", "qd", 
                    "pc", "pp", "pq", "qp","cc", "cq", "qc","qq"]
 
-USE_MCTS = False
+USE_MCTS = True
 MCTS_BOUND = 10
-MCTS_ITERS = 100
+MCTS_ITERS = 10
 GAME_TYPE = "Combine"  # "Combine"(suggested), "Picture", "Word"

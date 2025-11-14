@@ -163,6 +163,7 @@ model_config["res_channel"] = RES_CHANNELS
 model_config["res_layers"] = RES_LAYERS
 models = load_models(paths, data_types, model_config, device)
 use_mcts = USE_MCTS
+mcts_root = None
 
 while running:
     screen.fill(BACKGROUND_COLOR)
@@ -171,7 +172,11 @@ while running:
 
     if playing and computer_turn == turn:
         if use_mcts and len(game) > MCTS_BOUND:
-            pose = MCTS(data_types, models, device, board, seq, len(game), min(len(game)+50 ,max(150, len(game) + 20)), MCTS_ITERS)
+            mcts_root = MCTS(data_types, models, device, board, seq, len(game), 
+                    min(len(game)+50 ,max(100, len(game) + 20)), MCTS_ITERS, mcts_root)
+            idx, pose = mcts_root.find_move(len(game))
+            mcts_root = mcts_root.children[idx]
+
         else:
             poses, _ = vote_next_move(data_types, models, device, board, seq)
             tgt = 0
@@ -180,7 +185,7 @@ while running:
                 tgt += 1
                 x, y = split_move(poses[tgt])
             pose = poses[tgt]
-            
+        print(pose)
         result = pose
         last_move[turn] = result
         

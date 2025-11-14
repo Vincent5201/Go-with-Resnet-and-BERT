@@ -145,9 +145,26 @@ class MCTSnode():
             return 1
         return 0
     
+    def find_move(self, length):
+        bwinrate = self.children[0].w / self.children[0].n
+        idx = 0
+        for i, child in enumerate(self.children):
+            r = child.w / child.n
+            if length % 2:
+                if r < bwinrate:
+                    bwinrate = r
+                    idx = i
+            else:
+                if r > bwinrate:
+                    bwinrate = r
+                    idx = i
+                
+        return idx, self.expands[idx]
+    
 
-def MCTS(data_types, models, device, board, seq, length, num_moves, iters):
-    root = MCTSnode(board, seq, length)
+def MCTS(data_types, models, device, board, seq, length, num_moves, iters, root):
+    if root == None:
+        root = MCTSnode(board, seq, length)
     iter = 0
     root.expand(data_types, models, device)
     pbar = tqdm(total=iters, leave=False)
@@ -172,21 +189,8 @@ def MCTS(data_types, models, device, board, seq, length, num_moves, iters):
     while iter < iters:
         next(root)
     pbar.close()
-
-    bwinrate = root.children[0].w / root.children[0].n
-    idx = 0
-    for i, child in enumerate(root.children):
-        r = child.w / child.n
-        if length % 2:
-            if r < bwinrate:
-                bwinrate = r
-                idx = i
-        else:
-            if r > bwinrate:
-                bwinrate = r
-                idx = i
             
-    return root.expands[idx]
+    return root
 
 
 if __name__ == "__main__":
