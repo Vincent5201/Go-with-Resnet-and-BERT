@@ -22,7 +22,7 @@ def check(game, data_source, num_moves):
 
 def transfer(step):
     if isinstance(step, float):
-       return 361
+        return 361
     return (ord(step[0])-97) * 19 + (ord(step[1])-97) 
 
 def split_move(move):

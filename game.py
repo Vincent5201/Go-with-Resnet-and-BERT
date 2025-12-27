@@ -143,6 +143,24 @@ def quit_game():
     pygame.quit()
     sys.exit()
 
+def unvalid_choice(board, x, y, turn):
+    if board[0][x][y] or board[1][x][y]:
+        return True
+    turn = 1 - turn
+    count = 0
+    if valid_pos(x+1, y) and board[turn][x+1][y] == 0:
+        count += 1
+    if valid_pos(x-1, y) and board[turn][x-1][y] == 0:
+        count += 1
+    if valid_pos(x, y+1) and board[turn][x][y+1] == 0:
+        count += 1
+    if valid_pos(x, y-1) and board[turn][x][y-1] == 0:
+        count += 1
+    if count == 0:
+        return True
+    return False
+    
+
 paths = []
 if GAME_TYPE == "Combine":
     data_types = ["Combine"]
@@ -181,7 +199,7 @@ while running:
             poses, _ = vote_next_move(data_types, models, device, board, seq)
             tgt = 0
             x, y = split_move(poses[tgt])
-            while poses[tgt] == last_move[turn] or board[0][x][y] or board[1][x][y]:
+            while poses[tgt] == last_move[turn] or unvalid_choice(board, x, y, turn%2):
                 tgt += 1
                 x, y = split_move(poses[tgt])
             pose = poses[tgt]

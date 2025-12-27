@@ -125,10 +125,11 @@ class MCTSnode():
         if self.n > 0:
             print("rollout error")
             return
-
+        # change to a value evaluater
         board2 = np.array(self.board, copy=True)
         seq2 = np.array(self.seq, copy=True)
         move_count = self.length
+        
         while move_count < num_moves:
             move_count += 1
             poses, _ = vote_next_move(data_types, models, device, board2, seq2)
@@ -138,7 +139,7 @@ class MCTSnode():
             channel_2(board2, move_count + 1)
             channel_3(board2, x, y, move_count)
             seq2[move_count-1] = poses[0]
-       
+
         bwin = value_board(board2)
 
         if bwin:
