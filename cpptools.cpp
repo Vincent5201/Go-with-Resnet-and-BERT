@@ -12,90 +12,208 @@ inline bool valid_pos(int x, int y) {
     return x >= 0 && y >= 0 && x < BOARD_SIZE && y < BOARD_SIZE;
 }
 
-bool value_board(py::array_t<int> board_in) {
+void remove_die(vector<vector<int>> &board) {
+    // do not have already die on board
+    // how to determine almost die
+    return;
+}
+
+bool value_situation(py::array_t<int> board_in) {
     auto buf = board_in.request();
-
-    int (*board2)[BOARD_SIZE][BOARD_SIZE] = new int[4][BOARD_SIZE][BOARD_SIZE];
+    if (buf.ndim != 3) throw std::runtime_error("Number of dimensions must be 3");
+    // evaluate board precisely
     auto ptr = static_cast<int*>(buf.ptr);
-    for (int k = 0; k < 4; ++k)
-        for (int i = 0; i < BOARD_SIZE; ++i)
-            for (int j = 0; j < BOARD_SIZE; ++j)
-                board2[k][i][j] = ptr[k * BOARD_SIZE * BOARD_SIZE + i * BOARD_SIZE + j];
+    auto s0 = buf.strides[0] / sizeof(int);
+    auto s1 = buf.strides[1] / sizeof(int);
+    auto s2 = buf.strides[2] / sizeof(int);
+    // check value of s0, s1, s2
+    vector<vector<int>> mboard(BOARD_SIZE, vector<int>(BOARD_SIZE, 0));
+    vector<vector<int>> mboard2(BOARD_SIZE, vector<int>(BOARD_SIZE, 0));
 
-    auto neighbor_liberty = [&](int p, int x, int y) {
-        int pp = 1 - p;
-        set<pair<int, int>> counted;
-        vector<pair<int, int>> stack = {{x, y}};
-        int liberty = BOARD_SIZE * BOARD_SIZE;
-
-        while (!stack.empty()) {
-            auto [cx, cy] = stack.back();
-            stack.pop_back();
-            counted.insert({cx, cy});
-            for (auto [dx, dy] : vector<pair<int, int>>{{cx+1,cy}, {cx-1,cy}, {cx,cy+1}, {cx,cy-1}}) {
-                if (valid_pos(dx, dy) && !counted.count({dx, dy})) {
-                    if (board2[p][dx][dy])
-                        stack.push_back({dx, dy});
-                    else if (board2[pp][dx][dy])
-                        liberty = min(liberty, board2[3][dx][dy]);
-                }
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            int white_piece = ptr[0 * s0 + i * s1 + j * s2];
+            int black_piece = ptr[1 * s0 + i * s1 + j * s2];
+            if (black_piece > 0) {
+                mboard[i][j] = 128;
+            } else if (white_piece > 0) {
+                mboard[i][j] = -128;
             }
         }
-        return liberty;
-    };
+    }
+            
+    remove_die(mboard);
 
-    function<void(int, int, int)> del_die = [&](int x, int y, int p) {
-        board2[p][x][y] = 0;
-        board2[3][x][y] = 0;
-        for (auto [dx, dy] : vector<pair<int, int>>{{x-1,y}, {x,y-1}, {x+1,y}, {x,y+1}}) {
-            if (valid_pos(dx, dy) && board2[p][dx][dy])
-                del_die(dx, dy, p);
-        }
-    };
-
-    function<pair<int, int>(int, int)> count_neighbor = [&](int x, int y) {
-        set<pair<int, int>> counted;
-        function<pair<int, int>(int, int, int)> dfs = [&](int x, int y, int dist) -> pair<int, int> {
-            if (dist == 0) return {0, 0};
-            counted.insert({x, y});
-            int p0 = 0, p1 = 0;
-            for (auto [dx, dy] : vector<pair<int, int>>{{x+1,y}, {x,y-1}, {x-1,y}, {x,y+1}}) {
-                if (valid_pos(dx, dy) && !counted.count({dx, dy})) {
-                    if (board2[0][dx][dy]) {
-                        p0++;
-                    } else if (board2[1][dx][dy]) {
-                        p1++;
-                    } else {
-                        auto [t0, t1] = dfs(dx, dy, dist - 1);
-                        p0 += t0;
-                        p1 += t1;
+    // Bouzy's 5/21 Algorithm
+    // 5 Dilation
+    for (int t = 0; t < 5; t++) {
+        mboard2 = mboard;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (mboard2[i][j] > 0) {
+                    int count = 0;
+                    if (valid_pos(i - 1, j)) {
+                        if (mboard2[i - 1][j] < 0) {
+                            continue;
+                        }
+                        if (mboard2[i - 1][j] > 0) {
+                            count++;
+                        }
+                    }
+                    if (valid_pos(i + 1, j)) {
+                        if (mboard2[i + 1][j] < 0) {
+                            continue;
+                        }
+                        if (mboard2[i + 1][j] > 0) {
+                            count++;
+                        }
+                    }
+                    if (valid_pos(i, j - 1)) {
+                        if (mboard2[i][j - 1] < 0) {
+                            continue;
+                        }
+                        if (mboard2[i][j - 1] > 0) {
+                            count++;
+                        }
+                    }
+                    if (valid_pos(i, j + 1)) {
+                        if (mboard2[i][j + 1] < 0) {
+                            continue;
+                        }
+                        if (mboard2[i][j + 1] > 0) {
+                            count++;
+                        }
+                    }
+                    mboard[i][j] += count;
+                } else if (mboard[i][j] < 0) {
+                    int count = 0;
+                    if (valid_pos(i - 1, j)) {
+                        if (mboard2[i - 1][j] > 0) {
+                            continue;
+                        }
+                        if (mboard2[i - 1][j] < 0) {
+                            count++;
+                        }
+                    }
+                    if (valid_pos(i + 1, j)) {
+                        if (mboard2[i + 1][j] > 0) {
+                            continue;
+                        }
+                        if (mboard2[i + 1][j] < 0) {
+                            count++;
+                        }
+                    }
+                    if (valid_pos(i, j - 1)) {
+                        if (mboard2[i][j - 1] > 0) {
+                            continue;
+                        }
+                        if (mboard2[i][j - 1] < 0) {
+                            count++;
+                        }
+                    }
+                    if (valid_pos(i, j + 1)) {
+                        if (mboard2[i][j + 1] > 0) {
+                            continue;
+                        }
+                        if (mboard2[i][j + 1] < 0) {
+                            count++;
+                        }
+                    }
+                    mboard[i][j] -= count;
+                } else {
+                    int countp = 0;
+                    int countn = 0;
+                    if (valid_pos(i - 1, j)) {
+                        if (mboard2[i - 1][j] < 0) {
+                            countn++;
+                        }
+                        if (mboard2[i - 1][j] > 0) {
+                            countp++;
+                        }
+                    }
+                    if (valid_pos(i + 1, j)) {
+                        if (mboard2[i + 1][j] < 0) {
+                            countn++;
+                        }
+                        if (mboard2[i + 1][j] > 0) {
+                            countp++;
+                        }
+                    }
+                    if (valid_pos(i, j - 1)) {
+                        if (mboard2[i][j - 1] < 0) {
+                            countn++;
+                        }
+                        if (mboard2[i][j - 1] > 0) {
+                            countp++;
+                        }
+                    }
+                    if (valid_pos(i, j + 1)) {
+                        if (mboard2[i][j + 1] < 0) {
+                            countn++;
+                        }
+                        if (mboard2[i][j + 1] > 0) {
+                            countp++;
+                        }
+                    }
+                    if (countp > 0 && countn == 0) {
+                        mboard[i][j] += countp;
+                    } else if (countn > 0 && countp == 0) {
+                        mboard[i][j] -= countn;
                     }
                 }
             }
-            return {p0, p1};
-        };
-        return dfs(x, y, 10);
-    };
-
-    for (int i = 0; i < BOARD_SIZE; ++i)
-        for (int j = 0; j < BOARD_SIZE; ++j)
-            if (board2[3][i][j] == 1) {
-                int p = board2[1][i][j] ? 1 : 0;
-                if (neighbor_liberty(p, i, j) > 1)
-                    del_die(i, j, p);
+        }
+    }
+    // 21 Erosion
+    for (int t = 0; t < 5; t++) {
+        mboard2 = mboard;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (mboard2[i][j] > 0) {
+                    int count = 0;
+                    if (valid_pos(i - 1, j) && mboard2[i - 1][j] <= 0) {
+                        count++;
+                    }
+                    if (valid_pos(i + 1, j) && mboard2[i + 1][j] <= 0) {
+                        count++;
+                    }
+                    if (valid_pos(i, j - 1) && mboard2[i][j - 1] <= 0) {
+                        count++;
+                    }
+                    if (valid_pos(i, j + 1) && mboard2[i][j + 1] <= 0) {
+                        count++;
+                    }
+                    mboard[i][j] > count ? mboard[i][j] - count : 0;
+                } else if (mboard2[i][j] < 0) {
+                    int count = 0;
+                    if (valid_pos(i - 1, j) && mboard2[i - 1][j] >= 0) {
+                        count++;
+                    }
+                    if (valid_pos(i + 1, j) && mboard2[i + 1][j] >= 0) {
+                        count++;
+                    }
+                    if (valid_pos(i, j - 1) && mboard2[i][j - 1] >= 0) {
+                        count++;
+                    }
+                    if (valid_pos(i, j + 1) && mboard2[i][j + 1] >= 0) {
+                        count++;
+                    }
+                    mboard[i][j] < -count ? mboard[i][j] + count : 0;
+                }
             }
-
-    int p0 = 0, p1 = 0;
-    for (int i = 0; i < BOARD_SIZE; ++i)
-        for (int j = 0; j < BOARD_SIZE; ++j)
-            if (board2[0][i][j] == 0 && board2[1][i][j] == 0) {
-                auto [t0, t1] = count_neighbor(i, j);
-                p0 += t0;
-                p1 += t1;
-            }
-
-    delete[] board2;
-    return p1 > p0 + 5;
+        }
+    }
+    int countb = 0, countw = 0;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            if (mboard[i][j] > 0 && mboard[i][j] < 24)
+                countb++;
+            if (mboard[i][j] < 0 && mboard[i][j] > -24)
+                countw++;
+        }
+    }
+    
+    return countb > countw + 5;
 }
 
 void channel_01(py::array_t<int> board, int x, int y, int turn) {
@@ -211,7 +329,7 @@ void channel_3(py::array_t<int> board, int x, int y, int turn) {
 }
 
 PYBIND11_MODULE(cpptools, m) {
-    m.def("value_board", &value_board, "value board");
+    m.def("value_situation", &value_situation, "value_situation");
     m.def("channel_01", &channel_01, "channel_01");
     m.def("channel_3", &channel_3, "channel_3");
 }

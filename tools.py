@@ -44,3 +44,20 @@ def myaccn(pred_logits, true, n):
 def transfer_back(step):
     return chr((step//19)+97)+chr((step%19)+97) 
 
+def unvalid_choice(board, x, y, turn):
+    if board[0][x][y] or board[1][x][y]:
+        return True
+    turn %= 2
+    turn = 1 - turn
+    count = 0
+    if valid_pos(x+1, y) and board[turn][x+1][y] == 0:
+        count += 1
+    if valid_pos(x-1, y) and board[turn][x-1][y] == 0:
+        count += 1
+    if valid_pos(x, y+1) and board[turn][x][y+1] == 0:
+        count += 1
+    if valid_pos(x, y-1) and board[turn][x][y-1] == 0:
+        count += 1
+    if count == 0:
+        return True
+    return False

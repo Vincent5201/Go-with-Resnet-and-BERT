@@ -1,7 +1,7 @@
 from tools import *
 from gen_board import *
 from application import *
-from cpptools import value_board
+from cpptools import value_situation
 from math import sqrt
 
 """
@@ -102,9 +102,11 @@ class MCTSnode():
         for i in range(self.nch):
             board2 = np.array(self.board, copy=True)
             seq2 = np.array(self.seq, copy=True)
+            x, y = split_move(poses[i])
+            if unvalid_choice(board2, x, y, self.length + 1):
+                continue
             seq2[self.length] = poses[i]
             self.expands.append(poses[i])
-            x, y = split_move(poses[i])
             channel_01(board2, x, y, self.length + 1)
             channel_2(board2, self.length)
             channel_3(board2, x, y, self.length + 1)
@@ -140,7 +142,7 @@ class MCTSnode():
             channel_3(board2, x, y, move_count)
             seq2[move_count-1] = poses[0]
 
-        bwin = value_board(board2)
+        bwin = value_situation(board2)
 
         if bwin:
             return 1

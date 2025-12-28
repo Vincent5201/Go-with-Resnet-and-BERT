@@ -6,7 +6,8 @@ import random
 
 from application import *
 from gen_board import *
-from mcts import MCTS
+from tools import unvalid_choice
+from mcts import MCTS, unvalid_choice
 
 pygame.init()
 
@@ -142,23 +143,6 @@ def start():
 def quit_game():
     pygame.quit()
     sys.exit()
-
-def unvalid_choice(board, x, y, turn):
-    if board[0][x][y] or board[1][x][y]:
-        return True
-    turn = 1 - turn
-    count = 0
-    if valid_pos(x+1, y) and board[turn][x+1][y] == 0:
-        count += 1
-    if valid_pos(x-1, y) and board[turn][x-1][y] == 0:
-        count += 1
-    if valid_pos(x, y+1) and board[turn][x][y+1] == 0:
-        count += 1
-    if valid_pos(x, y-1) and board[turn][x][y-1] == 0:
-        count += 1
-    if count == 0:
-        return True
-    return False
     
 
 paths = []
@@ -196,7 +180,8 @@ while running:
             mcts_root = MCTS(data_types, models, device, board, seq, len(game), 
                     min(len(game)+50 ,max(100, len(game) + 20)), MCTS_ITERS, mcts_root)
             idx, pose = mcts_root.find_move(len(game))
-            mcts_root = mcts_root.children[idx]
+            #mcts_root = mcts_root.children[idx]
+            mcts_root = None
 
         else:
             poses, _ = vote_next_move(data_types, models, device, board, seq)
