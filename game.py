@@ -170,8 +170,11 @@ elif GAME_TYPE == "Picture":
     paths.append("models//ResNet//mid_s65_30000.pt")
 elif GAME_TYPE == "Word":
     data_types = ["Word"]
-    paths.append("models//BERT//mid_s45_20000.pt")
-
+    paths.append("models//BERT//mid_s27_30000.pt")
+elif GAME_TYPE == "Vote":
+    data_types = ["Word", "Picture"]
+    paths.append("models//BERT//mid_s27_30000.pt")
+    paths.append("models//ResNet//mid_s65_30000.pt")
 
 device = "cpu"
 model_config = {}
