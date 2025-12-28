@@ -197,11 +197,16 @@ while running:
 
         else:
             poses, _ = vote_next_move(data_types, models, device, board, seq)
+            #print(len(poses))
             tgt = 0
+            #xy = []
             x, y = split_move(poses[tgt])
+            #xy.append((x, y))
             while poses[tgt] == last_move[turn] or unvalid_choice(board, x, y, turn%2):
                 tgt += 1
                 x, y = split_move(poses[tgt])
+                #xy.append((x, y))
+            #print(xy)
             pose = poses[tgt]
             
         result = pose
