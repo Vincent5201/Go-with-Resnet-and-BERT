@@ -2,7 +2,7 @@ from tools import *
 from gen_board import *
 from application import *
 from cpptools import value_situation
-from math import sqrt
+from math import log, sqrt
 
 """
 def value_board(board):
@@ -74,12 +74,17 @@ def value_board(board):
     return p1 > p0 + 5
 """
 
+
+
 def get_UCB(node: "MCTSnode", offset):
-    if node.n == 0:
+    n = node.n
+    if n == 0:
         return 9223372036854775807
-    if node.parent is None:
-        return node.w / node.n + sqrt(2 * np.log(node.n) / node.n)
-    return node.w / node.n + sqrt(2 * np.log(node.parent.n + offset) / node.n)
+
+    exploit = node.w / n
+    parent_n = node.parent.n if node.parent else n
+    explore = sqrt(2.0 * log(parent_n + offset) / n)
+    return exploit + explore
 
 class MCTSnode():
     def __init__(self, board, seq, length, parent: "MCTSnode" = None):
@@ -91,62 +96,65 @@ class MCTSnode():
         self.seq = seq
         self.length = length
         self.parent = parent
-        self.nch = 5
+        self.nch = 3
         self.ucb = 9223372036854775807
     
     def expand(self, data_types, models, device):
-        if len(self.children) > 0:
-            print("expand error")
+        if self.children:
             return
+
         poses, _ = vote_next_move(data_types, models, device, self.board, self.seq)
+
+        board = self.board
+        seq = self.seq
+        length1 = self.length + 1
+        children = self.children
+        expands = self.expands
+
         for i in range(self.nch):
-            board2 = np.array(self.board, copy=True)
-            seq2 = np.array(self.seq, copy=True)
-            x, y = split_move(poses[i])
-            if unvalid_choice(board2, x, y, self.length + 1):
+            move = poses[i]
+            x, y = split_move(move)
+
+            board2 = board.copy()
+            seq2 = seq.copy()
+
+            if unvalid_choice(board2, x, y, length1):
                 continue
-            seq2[self.length] = poses[i]
-            self.expands.append(poses[i])
-            channel_01(board2, x, y, self.length + 1)
+
+            seq2[self.length] = move
+            expands.append(move)
+
+            channel_01(board2, x, y, length1)
             channel_2(board2, self.length)
-            channel_3(board2, x, y, self.length + 1)
-            self.children.append(MCTSnode(board2, seq2, self.length + 1, self))
+            channel_3(board2, x, y, length1)
+
+            children.append(MCTSnode(board2, seq2, length1, self))
+
     
     def select_child(self):
-        if len(self.children) == 0:
+        if not self.children:
             return None
-        maxucb = self.children[0].ucb
-        maxidx = 0
-        for i, child in enumerate(self.children):
-            if child.ucb > maxucb:
-                maxucb = child.ucb
-                maxidx = i
-        return self.children[maxidx]
+        return max(self.children, key=lambda c: c.ucb)
     
     def rollout(self, data_types, models, num_moves, device):
-        if self.n > 0:
-            print("rollout error")
-            return
-        # change to a value evaluater
-        board2 = np.array(self.board, copy=True)
-        seq2 = np.array(self.seq, copy=True)
+        board2 = self.board.copy()
+        seq2 = self.seq.copy()
+
         move_count = self.length
-        
+
         while move_count < num_moves:
-            move_count += 1
             poses, _ = vote_next_move(data_types, models, device, board2, seq2)
-            x, y = split_move(poses[0])
-            
+            move = poses[0]
+            x, y = split_move(move)
+
+            move_count += 1
             channel_01(board2, x, y, move_count)
             channel_2(board2, move_count + 1)
             channel_3(board2, x, y, move_count)
-            seq2[move_count-1] = poses[0]
 
-        bwin = value_situation(board2)
+            seq2[move_count - 1] = move
 
-        if bwin:
-            return 1
-        return 0
+        return 1 if value_situation(board2) else 0
     
     def find_move(self, length):
         bwinrate = self.children[0].w / self.children[0].n
