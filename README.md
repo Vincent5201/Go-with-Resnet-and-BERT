@@ -13,7 +13,7 @@ After the thesis was completed, I continued expanding the project (detailed in n
 ### Engine Architecture
 * A simplified Go engine design inspired by AlphaGo.
 * Monte Carlo Tree Search (MCTS) for strategic move selection.
-* No reinforcement learning used (purely supervised training + search).
+* No reinforcement learning used (purely supervised training + Bouzy’s 5/21 Algorithm).
 * C++ optimizations for performance-critical calculations (Python–C++ integration via pybind11).
 * Pygame-based interactive Go interface.
 
@@ -22,7 +22,7 @@ After the thesis was completed, I continued expanding the project (detailed in n
     * Traditional ResNet-based architecture.
     * BERT-based architecture (experimental approach treating Go as a text sequence).
 * Value Network
-    * Board evaluation based on Bouzy’s 5/21 Algorithm.
+    * Board evaluation based on Bouzy’s 5/21 Algorithm instead of neural network model.
 
 > Note: The current BERT model weights appear to be corrupted.
 
