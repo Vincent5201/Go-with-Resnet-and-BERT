@@ -8,6 +8,7 @@ The core idea was to treat the game of Go as a sequence of text tokens and use B
 After the thesis was completed, I continued expanding the project (detailed in next paragraph). This project serves both as a learning experience and as a playable Go engine that allows direct matches against trained models.
 
 > Key words: Go Engine Design, PyTorch, ResNet, BERT, Monte Carlo Tree Search (MCTS), Bouzy’s 5/21 Algorithm, pybind11, Python–C++ Integration
+> demo: https://drive.google.com/file/d/1e5euwbUa360M1Dj63Mja_KH-WQIOObLF/view?usp=drive_link
 
 ## Key Features
 ### Engine Architecture
