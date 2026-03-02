@@ -12,6 +12,6 @@ FIRST_STEPS = ["dd", "cd", "dc", "dp", "dq", "cp", "pd", "qd",
                    "pc", "pp", "pq", "qp","cc", "cq", "qc","qq"]
 
 USE_MCTS = True
-MCTS_BOUND = 10
-MCTS_ITERS = 10
+MCTS_BOUND = 40
+MCTS_ITERS = 40
 GAME_TYPE = "Picture"  # "Vote", "Combine", "Picture", "Word"
