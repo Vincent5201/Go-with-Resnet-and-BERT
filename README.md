@@ -3,13 +3,19 @@
 ## Overview
 This project was originally developed as my undergraduate thesis (see the [BERT-for-GO-prediction](https://github.com/Vincent5201/BERT-for-GO-prediction)).
 
-The core idea was to treat the game of Go as a sequence of text tokens and use BERT as the prediction model. Traditionally, Go AI models rely on image-based architectures such as ResNet, but this project explored the feasibility of using a text-based Transformer model instead. The original repository contains detailed comparisons and analysis.
+The core idea was to treat the game of Go as a sequence of text tokens and use BERT as the prediction model. Traditionally, Go AI models rely on image-based architectures such as ResNet, but this project explored the feasibility of us
+
+https://github.com/user-attachments/assets/852612cc-7537-483c-a0ae-0ad786f8d14f
+
+ing a text-based Transformer model instead. The original repository contains detailed comparisons and analysis.
 
 After the thesis was completed, I continued expanding the project (detailed in next paragraph). This project serves both as a learning experience and as a playable Go engine that allows direct matches against trained models.
 
 > Key words: Go Engine Design, PyTorch, ResNet, BERT, Monte Carlo Tree Search (MCTS), Bouzy’s 5/21 Algorithm, pybind11, Python–C++ Integration.
 
 > demo: https://drive.google.com/file/d/1e5euwbUa360M1Dj63Mja_KH-WQIOObLF/view?usp=drive_link
+https://github.com/user-attachments/assets/598cf9c7-2f9a-4f3f-80a6-6f8ed8bb3f86
+
 
 ## Key Features
 ### Engine Architecture
