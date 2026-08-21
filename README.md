@@ -5,8 +5,6 @@ This project was originally developed as my undergraduate thesis (see the [BERT-
 
 The core idea was to treat the game of Go as a sequence of text tokens and use BERT as the prediction model. Traditionally, Go AI models rely on image-based architectures such as ResNet, but this project explored the feasibility of us
 
-https://github.com/user-attachments/assets/852612cc-7537-483c-a0ae-0ad786f8d14f
-
 ing a text-based Transformer model instead. The original repository contains detailed comparisons and analysis.
 
 After the thesis was completed, I continued expanding the project (detailed in next paragraph). This project serves both as a learning experience and as a playable Go engine that allows direct matches against trained models.
