@@ -1,11 +1,9 @@
 # Go with ResNet and BERT
 
 ## Overview
-This project was originally developed as my undergraduate thesis (see the [BERT-for-GO-prediction](https://github.com/Vincent5201/BERT-for-GO-prediction)).
+This project was originally developed as my undergraduate capstone project (see the [BERT-for-GO-prediction](https://github.com/Vincent5201/BERT-for-GO-prediction)).
 
-The core idea was to treat the game of Go as a sequence of text tokens and use BERT as the prediction model. Traditionally, Go AI models rely on image-based architectures such as ResNet, but this project explored the feasibility of us
-
-ing a text-based Transformer model instead. The original repository contains detailed comparisons and analysis.
+The core idea was to treat the game of Go as a sequence of text tokens and use BERT as the prediction model. Traditionally, Go AI models rely on image-based architectures such as ResNet, but this project explored the feasibility of using a text-based Transformer model instead. The original repository contains detailed comparisons and analysis.
 
 After the thesis was completed, I continued expanding the project (detailed in next paragraph). This project serves both as a learning experience and as a playable Go engine that allows direct matches against trained models.
 
