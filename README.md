@@ -27,16 +27,16 @@ https://github.com/user-attachments/assets/31873403-3bc8-4e22-97e7-e72877d94648
 
 ### 2. C++ Optimization & pybind11
 Rewrote performance-critical loops and recursive functions in **C++** bound via **pybind11**:
-* **Rules & Capturing (`channel_01`)**: Fast recursive liberty tracking and stone capturing using `std::set`.
-* **Liberty Feature (`channel_3`)**: Optimized recursive tracking of group liberties (capped at 6).
-* **Territory Evaluation (`value_situation`)**: C++ implementation of **Bouzy's 5/21 algorithm** (5 dilations/erosions) for real-time territory estimation.
+* **Rules & Capturing (`channel_01`)**: Fast recursive liberty tracking and stone capturing.
+* **Liberty Feature (`channel_3`)**: Optimized recursive tracking of group liberties.
+* **Territory Evaluation (`value_situation`)**: C++ implementation of **Bouzy's 5/21 algorithm** for real-time territory estimation.
 
 ### 3. Custom Policy-Guided MCTS
 * **Search Strategy**: Combines standard UCB selection with policy-guided expansion and rollouts to focus search depth on high-probability candidate moves.
 * **State Evaluation**: Integrates C++ implemented Bouzy's 5/21 Algorithm for real-time territory and terminal state evaluation, dynamically updating tree node values for tactical decision-making.
 
 ### 4. Interactive Pygame GUI
-A real-time graphical interface featuring legal move validation, move history rollback, and customizable play modes (Human vs. AI / AI Self-Play).
+* A real-time graphical interface featuring legal move validation, move history rollback, and Human vs. AI play mode.
 ---
 
 ## Project Architecture
