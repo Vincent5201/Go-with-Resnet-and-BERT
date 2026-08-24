@@ -11,7 +11,9 @@ Traditional Go AI engines (such as AlphaGo and AlphaZero) rely on Convolutional 
 ### Extensions & Advancements
 Building upon the completion of my capstone project, I undertook expansions and optimizations on the original system. This repository represents the fully expanded version.
 
+
 > Key words: Go Engine Design, PyTorch, ResNet, BERT, Monte Carlo Tree Search (MCTS), Bouzy’s 5/21 Algorithm, pybind11, Python–C++ Integration.
+
 
 Demo Video: [Google Drive Link](https://drive.google.com/file/d/1e5euwbUa360M1Dj63Mja_KH-WQIOObLF/view?usp=drive_link)
 
