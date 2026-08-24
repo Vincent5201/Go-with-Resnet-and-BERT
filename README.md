@@ -21,13 +21,11 @@ https://github.com/user-attachments/assets/31873403-3bc8-4e22-97e7-e72877d94648
 
 ### 1. Dual-Model Benchmark & Ensemble
 > undergraduate capstone project part
-Evaluates and combines ResNet (2D spatial vision) and BERT (sequence modeling):
 
-Model Benchmarking: Compares spatial visual features directly against move-sequence representations.
-
-Hybrid Fusion: Merges frozen pre-trained ResNet and BERT features into a unified model for improved predictions.
-
-Voting Ensemble: Aggregates predictions across multiple models via weighted voting for superior decision robustness.
+* Evaluates and combines ResNet (2D spatial vision) and BERT (sequence modeling):
+* Model Benchmarking: Compares spatial visual features directly against move-sequence representations.
+* Hybrid Fusion: Merges frozen pre-trained ResNet and BERT features into a unified model for improved predictions.
+* Voting Ensemble: Aggregates predictions across multiple models via weighted voting for superior decision robustness.
 
 ### 2. C++ Optimization & pybind11
 
