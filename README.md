@@ -1,11 +1,13 @@
 # Go with ResNet and BERT
 
 ## Overview
-This project explores an innovative approach to Go AI by shifting from traditional visual recognition to an NLP sequence-modeling paradigm, alongside C++ engine optimizations and an interactive interface.
+This project originated as my undergraduate capstone project ([Original Repo](https://github.com/Vincent5201/BERT-for-GO-prediction)), which explores an innovative approach to Go AI by shifting from traditional visual recognition to an NLP sequence-modeling paradigm.
 
 * **Capstone Core**: Replaces traditional 2D image processing (CNN/ResNet) by treating Go move sequences as "words" in NLP. Uses **BERT** to validate sequence-based move prediction and benchmarks performance against visual architectures.
-* **Engine & MCTS Extensions**: Accelerates core game logic, liberty tracking, and Bouzy's territory estimation via **C++ (pybind11)**, paired with a custom policy-guided **MCTS** engine.
-* **Interactive Play**: Includes a real-time **Pygame GUI** supporting Human vs. AI and AI Self-Play modes.
+  * Each of the 361 board positions is mapped directly to a unique "word" in the NLP vocabulary. 
+* **C++ Optimization**: Rewrites core game logic in C++ (pybind11) to boost execution speed.
+* **MCTS Engine**: Implements a Monte Carlo Tree Search for strategic move selection.
+* **Interactive Play**: Includes a real-time Pygame GUI supporting Human vs. AI mode.
 
 > **Keywords**: Go Engine Design, PyTorch, ResNet, BERT, Monte Carlo Tree Search (MCTS), Bouzy’s 5/21 Algorithm, pybind11, Python–C++ Integration.
 
