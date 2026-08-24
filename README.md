@@ -6,7 +6,7 @@ This project originated as my undergraduate capstone project ([Original Repo](ht
 * **Capstone Core**: Replaces traditional 2D image processing (CNN/ResNet) by treating Go move sequences as "words" in NLP. Uses **BERT** to validate sequence-based move prediction and benchmarks performance against visual architectures.
   * Each of the 361 board positions is mapped directly to a unique "word" in the NLP vocabulary. 
 * **C++ Optimization**: Rewrites core game logic in C++ (pybind11) to boost execution speed.
-* **MCTS Engine**: Implements a Monte Carlo Tree Search for strategic move selection.
+* **MCTS Engine**: Implements a policy-guided Monte Carlo Tree Search integrated with Bouzy's 5/21 Algorithm to enhance strategic search capability.
 * **Interactive Play**: Includes a real-time Pygame GUI supporting Human vs. AI mode.
 
 > **Keywords**: Go Engine Design, PyTorch, ResNet, BERT, Monte Carlo Tree Search (MCTS), Bouzy’s 5/21 Algorithm, pybind11, Python–C++ Integration.
@@ -18,7 +18,7 @@ https://github.com/user-attachments/assets/31873403-3bc8-4e22-97e7-e72877d94648
 
 ---
 
-## 🛠 Key Implementations
+## Key Implementations
 ### 1. Dual-Model Benchmark & Ensemble
 *(Undergraduate Capstone Part)*
 * **Behavioral Comparison**: Analyzes tactical and strategic differences in playing styles between visual (ResNet) and sequence (BERT) representations.
@@ -32,15 +32,14 @@ Rewrote performance-critical loops and recursive functions in **C++** bound via 
 * **Territory Evaluation (`value_situation`)**: C++ implementation of **Bouzy's 5/21 algorithm** (5 dilations/erosions) for real-time territory estimation.
 
 ### 3. Custom Policy-Guided MCTS
-* **Selection**: Uses the standard UCB formula to balance exploration and exploitation.
-* **Guided Expansion & Rollout**: Expands top-$N$ candidate moves (`nch=3`) predicted by policy networks; rollouts are policy-guided up to depth limit (`num_moves=240`).
-* **Evaluation**: Evaluates terminal states directly via C++ Bouzy's algorithm to update UCB weights.
+* **Search Strategy**: Combines standard UCB selection with policy-guided expansion and rollouts to focus search depth on high-probability candidate moves.
+* **State Evaluation**: Integrates C++ implemented Bouzy's 5/21 Algorithm for real-time territory and terminal state evaluation, dynamically updating tree node values for tactical decision-making.
 
 ### 4. Interactive Pygame GUI
 A real-time graphical interface featuring legal move validation, move history rollback, and customizable play modes (Human vs. AI / AI Self-Play).
 ---
 
-## 📂 Project Architecture
+## Project Architecture
 
 * `config.py`: Global configurations (board size, hyperparameters, MCTS settings).
 * `tools.py` / `gen_board.py`: SGF parsing, coordinate conversions, and 4-channel tensor generation.
@@ -51,7 +50,7 @@ A real-time graphical interface featuring legal move validation, move history ro
 * `cpptools.cpp` / `cpp_setup.py`: Core C++ logic and pybind11 compilation setup.
 ---
 
-## 📊 Data Specifications
+## Data Specifications
 
 The engine represents 2D board states using a **4-channel matrix** (`CHANNEL_SIZE = 4`):
 
@@ -66,7 +65,7 @@ The engine represents 2D board states using a **4-channel matrix** (`CHANNEL_SIZ
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Build C++ Extension
 
@@ -81,8 +80,6 @@ python cpp_setup.py build_ext --inplace
 python game.py
 
 ```
-
-*(Toggle `GAME_TYPE` or enable `USE_MCTS = True` in `config.py`)*
 
 ### 3. Train & Evaluate
 
