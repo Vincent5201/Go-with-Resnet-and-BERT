@@ -19,20 +19,17 @@ https://github.com/user-attachments/assets/31873403-3bc8-4e22-97e7-e72877d94648
 
 ## 🛠 Key Implementations
 
-### 1. Hybrid Combine Network
+### 1. Dual-Model Benchmark & Ensemble
+> undergraduate capstone project part
+Evaluates and combines ResNet (2D spatial vision) and BERT (sequence modeling):
 
-Integrates **ResNet's spatial 2D vision** with **BERT's temporal sequence modeling**:
+Model Benchmarking: Compares spatial visual features directly against move-sequence representations.
 
-* **Weight Freezing**: Pre-trained ResNet and BERT weights are frozen during fusion training to preserve feature extraction and speed up convergence.
-* **Feature Concatenation**: Concatenates Softmax-normalized outputs from both models into a 722D feature vector.
-* **MLP Fusion**: Fuse visual and sequential features to predict optimal moves.
+Hybrid Fusion: Merges frozen pre-trained ResNet and BERT features into a unified model for improved predictions.
 
-### 2. Voting Ensemble Engine
+Voting Ensemble: Aggregates predictions across multiple models via weighted voting for superior decision robustness.
 
-* Parallelizes inference across multiple trained BERT, ResNet, and Combine models.
-* Aggregates predictions via weighted ensemble voting, significantly enhancing decision robustness.
-
-### 3. C++ Optimization & pybind11
+### 2. C++ Optimization & pybind11
 
 To resolve Python performance bottlenecks in loops and recursion, core game logic was rewritten in **C++** and bound via **pybind11**:
 
@@ -40,13 +37,13 @@ To resolve Python performance bottlenecks in loops and recursion, core game logi
 * **Liberty Feature (`channel_3`)**: Optimized recursive algorithm tracking liberties per stone group (capped at 6).
 * **Territory Evaluation (`value_situation`)**: C++ implementation of **Bouzy's 5/21 algorithm** (5 dilations/erosions) for real-time territory estimation.
 
-### 4. Custom Policy-Guided MCTS
+### 3. Custom Policy-Guided MCTS
 
 * **Selection**: Uses standard UCB formula to balance exploration and exploitation.
 * **Guided Expansion & Rollout**: Expands only top-$N$ candidate moves (`nch=3`) predicted by policy networks; rollouts are policy-guided up to a depth limit (`num_moves=240`).
 * **Evaluation**: Terminal states are evaluated directly via C++ Bouzy's algorithm to update UCB weights.
 
-### 5. Interactive Pygame GUI
+### 4. Interactive Pygame GUI
 
 Features real-time board rendering, legal move checks, move history rollback, and multiple game modes (Human vs. AI / AI Self-Play).
 
