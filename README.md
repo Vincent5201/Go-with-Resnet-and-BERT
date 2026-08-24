@@ -6,10 +6,10 @@
 
 This project originated as my undergraduate capstone project ([Original Repo](https://github.com/Vincent5201/BERT-for-GO-prediction)).
 
-Traditional Go AI engines (such as AlphaGo and AlphaZero) rely heavily on Convolutional Neural Networks (CNN/ResNet) to process the board state as a 2D visual image for feature extraction. In my capstone project, I explored an innovative, exploratory direction: treating the move sequence in a Go game as a sequence of "words" in Natural Language Processing (NLP). By introducing the BERT (Transformer) model from NLP, I set out to validate the feasibility of predicting move placements using a pure text-sequence language model, as well as conducting a comparative analysis between the two distinct architectures.
+Traditional Go AI engines (such as AlphaGo and AlphaZero) rely on Convolutional Neural Networks (CNN/ResNet) to process the board state as a 2D visual image for feature extraction. In my capstone project, I explored an innovative, exploratory direction: treating the move sequence in a Go game as a sequence of "words" in Natural Language Processing (NLP). By introducing the BERT (Transformer) model from NLP, I set out to validate the feasibility of predicting move placements using a pure text-sequence language model, as well as conducting a comparative analysis between the two distinct architectures.
 
 ### Extensions & Advancements
-Building upon the completion of my capstone project, I undertook significant architectural expansions and performance optimizations on the original system. This repository represents the fully expanded version, featuring deep advancements in model fusion, decision-making algorithms, C++ backend acceleration, and search engines.
+Building upon the completion of my capstone project, I undertook expansions and optimizations on the original system. This repository represents the fully expanded version.
 
 Demo Video: [Google Drive Link](https://drive.google.com/file/d/1e5euwbUa360M1Dj63Mja_KH-WQIOObLF/view?usp=drive_link)
 
@@ -25,7 +25,7 @@ Integrates **ResNet's spatial 2D vision** with **BERT's temporal sequence modeli
 
 * **Weight Freezing**: Pre-trained ResNet and BERT weights are frozen during fusion training to preserve feature extraction and speed up convergence.
 * **Feature Concatenation**: Concatenates Softmax-normalized outputs from both models into a 722D feature vector.
-* **MLP Fusion**: A two-layer MLP (722 -> 512 -> 361) balances visual and sequential features to predict optimal moves.
+* **MLP Fusion**: Fuse visual and sequential features to predict optimal moves.
 
 ### 2. Voting Ensemble Engine
 
