@@ -6,11 +6,17 @@
 
 This project originated as my undergraduate capstone project ([Original Repo](https://github.com/Vincent5201/BERT-for-GO-prediction)).
 
-Traditional Go AI engines (such as AlphaGo and AlphaZero) rely on Convolutional Neural Networks (CNN/ResNet) to process the board state as a 2D visual image for feature extraction. In my capstone project, I explored an innovative, exploratory direction: treating the move sequence in a Go game as a sequence of "words" in Natural Language Processing (NLP). By introducing the BERT (Transformer) model from NLP, I set out to validate the feasibility of predicting move placements using a pure text-sequence language model, as well as conducting a comparative analysis between the two distinct architectures.
+* Traditional Approach: Treats the Go board as a 2D visual image, using convolutional neural networks (CNN/ResNet) for feature extraction of board states (e.g., AlphaGo, AlphaZero, Katago).
+* Capstone Innovation: Replaces the visual paradigm by treating the move sequence of a Go game as a sequence of "words" in Natural Language Processing (NLP).
+  * Each of the 361 board positions is mapped directly to a unique "word" in the NLP vocabulary.
+  * Leverages the BERT model to validate whether a pure text-sequence language model can accurately predict move placements.
+* Evaluates and compares performance across two fundamentally distinct architectures: image-based convolution (CNN) vs. sequence-based language modeling (BERT).
 
 ### Extensions & Advancements
-Building upon the completion of my capstone project, I undertook expansions and optimizations on the original system. This repository represents the fully expanded version.
-
+Building upon the completion of my capstone project, I undertook expansions and optimizations on the original system.
+* C++ Engine Optimization: Rewrote core game logic, liberty tracking, and territory estimation in C++ using pybind11 to eliminate Python performance bottlenecks.
+* Custom Policy-Guided MCTS: Implemented a MCTS algorithm guided by neural network predictions and C++ evaluation functions to improve search efficiency.
+* Interactive Pygame GUI: Built a real-time graphical interface supporting board visualization, move history rollback, and Human vs. AI / AI Self-Play modes.
 
 > Key words: Go Engine Design, PyTorch, ResNet, BERT, Monte Carlo Tree Search (MCTS), Bouzy’s 5/21 Algorithm, pybind11, Python–C++ Integration.
 
